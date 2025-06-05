@@ -1,4 +1,4 @@
-import time
+import time from time
 from datetime import datetime
 import boto3    
 import board
