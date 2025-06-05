@@ -54,7 +54,7 @@ def take_sample():
     for _ in range(SAMPLE_SIZE):
         moisture = ss.moisture_read()
         readings.append(moisture)
-        time.sleep(DELAY_BETWEEN_READS)
+        sleep(DELAY_BETWEEN_READS)
     return sum(readings) / len(readings)
 
 def moisture_to_percentage(value, min_val=200, max_val=2000):
