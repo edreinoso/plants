@@ -7,11 +7,47 @@ from adafruit_seesaw.seesaw import Seesaw
 SAMPLE_SIZE = 10
 DELAY_BETWEEN_READS = 0.5  # seconds
 
+client = boto3.client('timestream-write')
 i2c_bus = board.I2C()
 ss = Seesaw(i2c_bus, addr=0x36)
 
 previous_avg = None
 trend = None  # "up" or "down"
+
+DATABASE_NAME = 'sampleDatabase'
+TABLE_NAME = 'sampleTable'
+
+def write_to_timestream(temp_c, moisture_percent, sensor_id="moisture-sensor-1"):
+    timestamp = str(int(time() * 1000))  # in milliseconds
+
+    temp_record = {
+        'Dimensions': [
+            {'Name': 'sensor_id', 'Value': sensor_id},
+        ],
+        'MeasureName': 'temperature',
+        'MeasureValue': str(temp_c),
+        'MeasureValueType': 'DOUBLE',
+        'Time': timestamp
+    }
+
+    moisture_record = {
+        'Dimensions': [
+            {'Name': 'sensor_id', 'Value': sensor_id},
+        ],
+        'MeasureName': 'moisture_percent',
+        'MeasureValue': str(moisture_percent),
+        'MeasureValueType': 'DOUBLE',
+        'Time': timestamp
+    }
+
+    response = client.write_records(
+        DatabaseName=DATABASE_NAME,
+        TableName=TABLE_NAME,
+        Records=[temp_record, moisture_record]
+    )
+
+    print("Write successful:", response)
+
 
 def take_sample():
     readings = []
