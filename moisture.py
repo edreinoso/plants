@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-
+import boto3    
 import board
 from adafruit_seesaw.seesaw import Seesaw
 
