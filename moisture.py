@@ -1,4 +1,4 @@
-from time import time
+from time import time, sleep
 from datetime import datetime
 import boto3    
 import board
