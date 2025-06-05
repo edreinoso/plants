@@ -72,12 +72,12 @@ while True:
             if trend == "down":
                 moisture_pct = moisture_to_percentage(previous_avg)
                 print(f"[{now}] temp: {calibrated_temp:.2f} °C  moisture avg: {moisture_pct:.1f}%")
-                write_records(calibrated_temp, moisture_pct)
+                write_to_timestream(calibrated_temp, moisture_pct)
             trend = "up"
         elif avg_moisture < previous_avg:
             if trend == "up":
                 moisture_pct = moisture_to_percentage(previous_avg)
-                write_records(calibrated_temp, moisture_pct)
+                write_to_timestream(calibrated_temp, moisture_pct)
                 print(f"[{now}] temp: {calibrated_temp:.2f} °C  moisture avg: {moisture_pct:.1f}%")
             trend = "down"
         # If same, no change
