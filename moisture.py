@@ -21,6 +21,10 @@ def take_sample():
         time.sleep(DELAY_BETWEEN_READS)
     return sum(readings) / len(readings)
 
+def moisture_to_percentage(value, min_val=200, max_val=2000):
+    percent = (value - min_val) / (max_val - min_val) * 100
+    return max(0, min(100, percent))  # clamp between 0 and 100
+
 while True:
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     avg_moisture = take_sample()
@@ -29,11 +33,13 @@ while True:
     if previous_avg is not None:
         if avg_moisture > previous_avg:
             if trend == "down":
-                print(f"[{now}] temp: {temp:.2f} °C  moisture avg: {previous_avg:.1f} ↓")
+                moisture_pct = moisture_to_percentage(previous_avg)
+                print(f"[{now}] temp: {temp:.2f} °C  moisture avg: {moisture_pct:.1f}%")
             trend = "up"
         elif avg_moisture < previous_avg:
             if trend == "up":
-                print(f"[{now}] temp: {temp:.2f} °C  moisture avg: {previous_avg:.1f} ↑")
+                moisture_pct = moisture_to_percentage(previous_avg)
+                print(f"[{now}] temp: {temp:.2f} °C  moisture avg: {moisture_pct:.1f}%")
             trend = "down"
         # If same, no change
 
