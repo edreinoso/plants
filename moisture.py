@@ -46,8 +46,6 @@ def write_to_timestream(temp_c, moisture_percent, sensor_id="moisture-sensor-1")
         Records=[temp_record, moisture_record]
     )
 
-    print("Write successful:", response)
-
 
 def take_sample():
     readings = []
